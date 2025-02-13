@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    </head>
+    <style> 
+body {
+    font-family: Arial, sans-serif;
+    background: black; color: white; text-align: center; 
+}
+.navbar {
+    background-color:#FFF5EE;
+    padding: 20px;
+}
+.menu {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+}
+.menu li {
+    margin: 0 15px;
+}
+.menu a {
+    color: #333333;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+    font-size: 24px;
+}
+.menu a:hover {
+    background-color: #DC143C;
+    border-radius: 4px;
+}
+ button {
+    padding: 15px 35px; font-size: 17px; border-radius: 12px; 
+}
+.buy {
+    padding: 50px; gap: 5px;
+}
+.buy2 {
+    padding: 50px; gap: 5px;
+}
+.buy3 {
+    padding: 50px; gap: 5px;
+}
+.buy4 {
+    padding: 50px; gap: 5px;
+}
+    </style>
+    <body>
+        <header>
+
+            <nav class="navbar">
+                <ul class="menu">
+                   <li><a href="order.html">Магазин</a></li>
+                </ul>
+            </nav>
+           </header> 
+           <div class="buy">
+           <button onclick="buyItem(66)">66 очков</button>
+           <h2>Купить пожелание!</h2>
+           </div>
+           <div class="buy2">
+            <button onclick="buyItem(101)">101 очков</button>
+            <h2>Купить 101 котика</h2>
+            </div>
+            <div class="buy3">
+                <button onclick="buyItem(69)">69 очков</button>
+                <h2>Купить подарок для<br> разработчика этой игры</h2>
+                </div>
+                <div class="buy4">
+                    <button onclick="buyItem(300)">300 очков</button>
+                    <h2>Купить сладости!</h2>
+                    </div>
+<script>
+
+     let tg = window.Telegram.WebApp;  
+     tg.expand();
+
+     function updateScoreDisplay() {
+    let totalScore = localStorage.getItem("totalScore") || 0;
+    document.getElementById("totalScore").innerText = totalScore;
+}
+// Функция для покупки предмета
+function buyItem(cost) {
+    let totalScore = parseInt(localStorage.getItem("totalScore") || "0");
+
+    if (totalScore >= cost) {
+        totalScore -= cost; // Вычитаем стоимость из счета
+        localStorage.setItem("totalScore", totalScore); // Сохраняем новый баланс
+        updateScoreDisplay(); // Обновляем отображение
+        
+        if (cost === 66){
+            alert ("С Днем Святого Валентина, дорогая Ирочка! 💖 Остаток: " + totalScore);
+        }
+        
+        else {
+        alert("Недостаточно очков!");
+    }
+    if(cost === 101){
+        alert ("Упс! Кошечки у меня. я тебе их не дам! Остаток: " + totalScore);
+    }
+    else {
+        alert("Недостаточно очков!");
+}
+ if (cost === 69){
+    alert ("Пришли любое свое фото разработчику, Бистро!) 💖 Остаток: " + totalScore);
+ }
+ else {
+    alert("Недостаточно очков!");
+}
+  if (cost === 300) {
+    alert ("Ваша вкусняшка уже в пути. Сообщите об этом разработчику)  Остаток: " + totalScore);
+  }
+  else {
+    alert("Недостаточно очков!");
+}
+}
+}
+// При загрузке страницы обновляем счет
+window.onload = updateScoreDisplay;
+
+</script>
+    </body>
+    </html>
