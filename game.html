@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: black; font-family: Arial, sans-serif;}
+        #app { position: relative; width: 100vw; height: 100vh; }
+        .heart { position: absolute; font-size: 30px; cursor: pointer; user-select: none;
+        -webkit-user-select: none;
+    -moz-user-select: none;
+-ms-user-select: none; }
+        .heart:focus{
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .Whheart:focus{
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #countdown, #score { 
+            position: absolute; 
+            top: 10px; 
+            font-size: 24px; 
+            color: white; 
+            z-index: 100; 
+        }
+        .Whheart {
+            position: absolute; 
+            width: 40px; 
+            height: 40px; 
+            cursor: pointer; 
+            transition: top 3s linear, transform 0.3s ease-out, opacity 0.3s ease-out; 
+            user-select: none;
+        -webkit-user-select: none;
+    -moz-user-select: none;
+-ms-user-select: none;
+        }
+        #countdown { right: 10px; }
+        #score { left: 10px; }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <div id="countdown"></div>
+    <div id="score">Score: 0</div>
+    <script>
+        const app = document.getElementById("app");
+        const scoreElement = document.getElementById("score");
+        let score = 0;
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.innerText = "❤️";
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * (window.innerWidth - 40) + "px";
+            heart.style.top = "-40px";
+            heart.style.opacity = "1";
+            heart.style.transition = "top 3s linear, transform 0.3s ease-out, opacity 0.3s ease-out";
+            app.appendChild(heart);
+            setInterval(createHeart, 10900);
+            heart.style.fontSize = "35px";
+            heart.style.padding = "10px";
+
+            setTimeout(() => {
+                heart.style.top = window.innerHeight + "px";
+            }, 50);
+            
+            heart.addEventListener("click", () => {
+                if (!heart.parentElement) return;
+                score++;
+                scoreElement.innerText = "Score: " + score;
+                heart.style.transform = "scale(0)";
+                heart.style.opacity = "0";
+                heart.style.pointerEvents = "none";
+                setTimeout(() => heart.remove(), 300);
+            });
+            
+            setTimeout(() => heart.remove(), 3100);
+        }
+          function createWhheart() {
+            const Whheart = document.createElement("img");
+            Whheart.src = "whhertss.png"; // URL пиксельного котика
+            Whheart.classList.add("Whheart");
+            Whheart.style.left = Math.random() * (window.innerWidth - 40) + "px";
+            Whheart.style.top = "-40px";
+            Whheart.style.position = "absolute";
+            Whheart.style.width = "50px";
+            Whheart.style.height = "50px";
+            Whheart.style.opacity = "1";
+                app.appendChild(Whheart);
+                Whheart.style.padding = "15px";
+                setTimeout(() => {
+                    Whheart.style.top = window.innerHeight + "px";
+                }, 50);
+                
+                Whheart.addEventListener("click", () => {
+                    if (!Whheart.parentElement) return;
+                    score -= 5;
+                    scoreElement.innerText = "Score: " + score;
+                    Whheart.style.transform = "scale(0)";
+                    Whheart.style.opacity = "0";
+                    Whheart.style.pointerEvents = "none";
+                    setTimeout(() => Whheart.remove(), 300);
+                });
+                
+                setTimeout(() => Whheart.remove(), 3100);
+            
+          }
+        function startCountdown(duration, redirectUrl) {
+            let timer = duration;
+            const countdownElement = document.getElementById("countdown");
+            
+            const interval = setInterval(() => {
+                countdownElement.textContent = "время: " + timer;
+                
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    endGame(redirectUrl);
+                }
+                
+                timer = Math.max(0, timer - 1);
+            }, 1000);
+        }
+
+        function endGame(redirectUrl) {
+            let totalScore = parseInt(localStorage.getItem("totalScore") || "0"); 
+            totalScore += score;
+            localStorage.setItem("totalScore", totalScore);
+            
+            alert("Игра окончена! Твой счет: " + score + "\nОбщий баланс: " + totalScore);
+            window.location.href = redirectUrl;
+        }
+
+        window.onload = function() {
+            startCountdown(30, "https://nezax128.github.io/Gmae/");
+            setInterval(createHeart, 1000);
+            setInterval(createWhheart, 3000);
+        };
+    </script>
+</body>
+</html>
