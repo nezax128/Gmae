@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameCake</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: Arial, sans-serif;
+    }
+
+    #app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .cake {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      transition: top 3s linear, transform 0.3s ease-out, opacity 0.3s ease-out;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    #countdown,
+    #score {
+      position: absolute;
+      top: 10px;
+      font-size: 22px;
+      color: white;
+      z-index: 100;
+    }
+
+    #countdown {
+      right: 10px;
+    }
+
+    #score {
+      left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="countdown"></div>
+  <div id="score">Score: 0</div>
+
+  <script>
+    const app = document.getElementById("app");
+    const scoreElement = document.getElementById("score");
+    let score = 0;
+
+    function createCake() {
+      const cake = document.createElement("img");
+      cake.src = "cakewithout.png"; // Прямая ссылка на изображение
+      cake.classList.add("cake");
+      cake.style.left = Math.random() * (window.innerWidth - 60) + "px";
+      cake.style.top = "-60px";
+      cake.style.padding = "13px";
+      app.appendChild(cake);
+
+      setTimeout(() => {
+        cake.style.top = window.innerHeight + "px";
+      }, 50);
+
+      cake.addEventListener("click", () => {
+        if (!cake.parentElement) return;
+        score += 3;
+        scoreElement.innerText = "Score: " + score;
+        cake.style.transform = "scale(0)";
+        cake.style.opacity = "0";
+        cake.style.pointerEvents = "none";
+        setTimeout(() => cake.remove(), 300);
+      });
+
+      setTimeout(() => cake.remove(), 3100);
+    }
+
+    function startCountdown(duration, redirectUrl) {
+      let timer = duration;
+      const countdownElement = document.getElementById("countdown");
+
+      const interval = setInterval(() => {
+        countdownElement.textContent = "время: " + timer;
+
+        if (timer <= 0) {
+          clearInterval(interval);
+          endGame(redirectUrl);
+        }
+
+        timer = Math.max(0, timer - 1);
+      }, 1000);
+    }
+
+    function endGame(redirectUrl) {
+      let totalScore = parseInt(localStorage.getItem("totalScore") || "0");
+      totalScore += score;
+      localStorage.setItem("totalScore", totalScore);
+
+      alert("Игра окончена! Твой счет: " + score + "\nОбщий баланс: " + totalScore);
+      window.location.href = redirectUrl;
+    }
+
+    window.onload = function () {
+      startCountdown(30, "https://nezax128.github.io/Gmae/");
+      setInterval(createCake, 2000);
+    };
+  </script>
+</body>
+</html>
